@@ -6,15 +6,42 @@ from sklearn.model_selection import train_test_split
 from matplotlib.colors import ListedColormap
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.cross_validation import cross_val_score
+from sklearn import preprocessing as pp
+
+
+############################# Data exploration #############################
+
+# Import the dataset
+mushrooms = pd.read_csv("mushrooms.csv")
+
+# Print instances 
+countInstances = (mushrooms.count())
+print(countInstances)
+
+# Print one attrbute and instances of that attribute
+mushrooms.head()
+
+# Average, standard dev, median of values
+print(mushrooms.describe())
+mushrooms.head()
 
 ############################# Preprocessing the dataset #############################
 
-# Import the dataset 
-mushrooms = pd.read_csv("mushrooms.csv")
+# Change the data into numeric 
+dat = mushrooms.values
+print(dat)
 
-print(mushrooms.columns)
+array = mushrooms.values
+X = array[:,1:23]
+Y = array[:,0]
 
-#print(row[0] for row in  mushrooms)
+
+X_train, X_test, y_train, y_test = train_test_split(X,Y, test_size=0.20, random_state=42)
+
+sns.countplot(Y)
+plt.show()
+
+
 
 
 
