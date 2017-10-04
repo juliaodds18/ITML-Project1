@@ -12,7 +12,9 @@ from sklearn.cross_validation import cross_val_score
 # Import the dataset 
 mushrooms = pd.read_csv("mushrooms.csv")
 
-print(mushrooms.values.shape())
+print(mushrooms.columns)
+
+#print(row[0] for row in  mushrooms)
 
 
 
