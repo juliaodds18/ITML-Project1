@@ -9,6 +9,7 @@ from sklearn.cross_validation import cross_val_score
 
 ############################# Preprocessing the dataset #############################
 
-movies = pd.read_csv("mushrooms.csv")
-
 # Import the dataset 
+mushrooms = pd.read_csv("mushrooms.csv")
+
+
