@@ -12,4 +12,83 @@ from sklearn.cross_validation import cross_val_score
 # Import the dataset 
 mushrooms = pd.read_csv("mushrooms.csv")
 
+print(mushrooms.values.shape())
+
+
+
+'''
+Logical rules for the mushroom data sets.
+
+	Logical rules given below seem to be the simplest possible for the
+	mushroom dataset and therefore should be treated as benchmark results.
+
+	Disjunctive rules for poisonous mushrooms, from most general
+	to most specific:
+
+	P_1) odor=NOT(almond.OR.anise.OR.none)
+	     120 poisonous cases missed, 98.52% accuracy
+
+	P_2) spore-print-color=green
+	     48 cases missed, 99.41% accuracy
+         
+	P_3) odor=none.AND.stalk-surface-below-ring=scaly.AND.
+	          (stalk-color-above-ring=NOT.brown) 
+	     8 cases missed, 99.90% accuracy
+         
+	P_4) habitat=leaves.AND.cap-color=white
+	         100% accuracy     
+
+	Rule P_4) may also be
+
+	P_4') population=clustered.AND.cap_color=white
+
+	These rule involve 6 attributes (out of 22). Rules for edible
+	mushrooms are obtained as negation of the rules given above, for
+	example the rule:
+
+	odor=(almond.OR.anise.OR.none).AND.spore-print-color=NOT.green
+
+	gives 48 errors, or 99.41% accuracy on the whole dataset.
+
+	Several slightly more complex variations on these rules exist,
+	involving other attributes, such as gill_size, gill_spacing,
+	stalk_surface_above_ring, but the rules given above are the simplest
+	we have found.
+
+	 1. cap-shape:                bell=b,conical=c,convex=x,flat=f,
+                                  knobbed=k,sunken=s
+     2. cap-surface:              fibrous=f,grooves=g,scaly=y,smooth=s
+     3. cap-color:                brown=n,buff=b,cinnamon=c,gray=g,green=r,
+                                  pink=p,purple=u,red=e,white=w,yellow=y
+     4. bruises?:                 bruises=t,no=f
+     5. odor:                     almond=a,anise=l,creosote=c,fishy=y,foul=f,
+                                  musty=m,none=n,pungent=p,spicy=s
+     6. gill-attachment:          attached=a,descending=d,free=f,notched=n
+     7. gill-spacing:             close=c,crowded=w,distant=d
+     8. gill-size:                broad=b,narrow=n
+     9. gill-color:               black=k,brown=n,buff=b,chocolate=h,gray=g,
+                                  green=r,orange=o,pink=p,purple=u,red=e,
+                                  white=w,yellow=y
+    10. stalk-shape:              enlarging=e,tapering=t
+    11. stalk-root:               bulbous=b,club=c,cup=u,equal=e,
+                                  rhizomorphs=z,rooted=r,missing=?
+    12. stalk-surface-above-ring: fibrous=f,scaly=y,silky=k,smooth=s
+    13. stalk-surface-below-ring: fibrous=f,scaly=y,silky=k,smooth=s
+    14. stalk-color-above-ring:   brown=n,buff=b,cinnamon=c,gray=g,orange=o,
+                                  pink=p,red=e,white=w,yellow=y
+    15. stalk-color-below-ring:   brown=n,buff=b,cinnamon=c,gray=g,orange=o,
+                                  pink=p,red=e,white=w,yellow=y
+    16. veil-type:                partial=p,universal=u
+    17. veil-color:               brown=n,orange=o,white=w,yellow=y
+    18. ring-number:              none=n,one=o,two=t
+    19. ring-type:                cobwebby=c,evanescent=e,flaring=f,large=l,
+                                  none=n,pendant=p,sheathing=s,zone=z
+    20. spore-print-color:        black=k,brown=n,buff=b,chocolate=h,green=r,
+                                  orange=o,purple=u,white=w,yellow=y
+    21. population:               abundant=a,clustered=c,numerous=n,
+                                  scattered=s,several=v,solitary=y
+    22. habitat:                  grasses=g,leaves=l,meadows=m,paths=p,
+                                  urban=u,waste=w,woods=d
+
+'''
 
