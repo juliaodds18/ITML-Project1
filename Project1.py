@@ -4,12 +4,14 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from matplotlib.colors import ListedColormap
-from sklearn.neighbors import KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier as KNN
 from sklearn.cross_validation import cross_val_score
-from sklearn import preprocessing as pp
+import sklearn.preprocessing as pp
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+from sklearn.preprocessing import LabelEncoder
+import json
+import os
 
 ############################# Data exploration #############################
 
@@ -27,11 +29,9 @@ mushrooms.head()
 print(mushrooms.describe())
 mushrooms.head()
 
-############################# Preprocessing the dataset #############################
+mushrooms.describe()
 
-# Change the data into numeric 
-dat = mushrooms.values
-print(dat)
+############################# Preprocessing the dataset #############################
 
 # Look if there is any missing value
 for feature in mushrooms.columns:
@@ -41,21 +41,116 @@ for feature in mushrooms.columns:
 mushrooms = mushrooms.drop(mushrooms[mushrooms['stalk-root']=='?'].index)
 mushrooms = mushrooms.drop('veil-type', axis=1)
 
+
+# Change the values to numeric with labelancoder
+mushrooms_data = mushrooms.values
+lEncoder = LabelEncoder()
+lEncoder.fit(mushrooms_data[:, 0])
+dataa = lEncoder.transform(mushrooms_data[:, 0])
+
+# Loop through all the columns and change them to numeric
+# Put all the new values into vstack
+for ix in range(1, mushrooms_data.shape[1]):
+    le = pp.LabelEncoder()
+    le.fit(mushrooms_data[:, ix])
+    y = le.transform(mushrooms_data[:, ix])
+    dataa = np.vstack((dataa , y))
+   
+# Transform the  
+data = dataa.T
+
+print(data)
+
 # Look if the missing value is gone 
 for feature in mushrooms.columns:
     print(feature, ':', mushrooms[feature].unique())
 
-array = mushrooms.values
-X = array[:,1:23]
-Y = array[:,0]
 
+############################# Splitting the data to traingin and test set #############################
+
+Y = data[:,0]
+X = data[:,1:23]
 
 X_train, X_test, y_train, y_test = train_test_split(X,Y, test_size=0.20, random_state=42)
 
 sns.countplot(Y)
 plt.show()
 
+############################# K nearest neighbor #############################
 
+'''listOfk = list(range(1,4000))
+neigh = list(filter(lambda x: x % 10 == 0, listOfk))
+
+
+#Find the current directory 
+directory = os.getcwd()
+# Open a new grading file (truncates if exists, change that by erasing the + in 'w+')
+textFile = open('bestK.txt', 'w+')
+
+accuracy = []
+answers = []
+
+for i in range(len(neigh)):
+    knn = KNN(n_neighbors=neigh[i], n_jobs=-1)
+    
+    knn.fit(X_train, y_train)
+
+    #print "Training Time : ", end-start
+    score = knn.score(X_test, y_test)
+
+    #print "Testing Time : ", end-start
+
+    #print "Accurcy : ", score*100 
+    jsonObj = {'score:' : score*100}
+    textFile.write(json.dumps(jsonObj, ensure_ascii = False) + "\n")
+    # accuracy.append(score*100)
+    # temp = dt.feature_importances_
+    # answers.append(temp)
+    #print "\n" 
+
+textFile.close()
+
+temp = []
+
+for i in range(0, len(ans)):
+    temp.append(np.argmax(ans[ix]))
+
+mode = max(set(temp), key=temp.count) #find mode for features importance in variable estimators
+print "Features most indicative of a poisonous mushroom wrt kNN : ", headers[mode+1]
+
+plt.figure(2)
+plt.suptitle('k-Nearest Neighbour Plot', fontsize=10)
+plt.plot(neighbours, acc, '-o')
+plt.xlabel('Neighbours', fontsize=16)
+plt.ylabel('Accuracy', fontsize=16)
+plt.show()'''
+
+# Create color maps
+'''cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
+cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
+listOfk = list(range(1,4000))
+neigh = list(filter(lambda x: x % 10 == 0, listOfk))
+
+# empty list that will hold cv scores
+# cv_scores = []
+
+#Find the current directory 
+directory = os.getcwd()
+# Open a new grading file (truncates if exists, change that by erasing the + in 'w+')
+textFile = open('bestK.txt', 'w+')
+
+# Perform 10-fold cross validation
+# This is done to find the best value for k 
+for k in neigh:
+    knn = KNeighborsClassifier(n_neighbors=k)
+    scores = cross_val_score(knn, X_train, y_train, cv=10, scoring='accuracy')
+    # cv_scores.append(scores.mean())
+    jsonObj = {'k' : k, 'score:' : scores.mean()}
+    textFile.write(json.dumps(jsonObj, ensure_ascii = False) + "\n")
+
+# This is the best value for k, at least on the range that we tested
+print(max(cv_scores))
+textFile.close()'''
 
 '''
 Logical rules for the mushroom data sets.
